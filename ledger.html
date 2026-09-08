@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>The Ledger</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="The Ledger">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#14181c">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD7klEQVR4nO3dwXHbMBCF4edMSsjBh5SVSlJIKklhKSMHzng4tJ9EkQB2F/i/m8cHy97fBGBL1NuP958CvvIt+gEgL+KARRywiAMWccAiDljEAYs4YBEHLOKARRywiAMWccAiDljEAYs4YBEHLOKARRywiAMWccAiDljEAYs4YBEHLOKARRywiAMWccAiDljEAYs4YBEHLOKARRywiAMWccAiDljEAYs4YBEHLOKARRywiAMWccAiDljfox8AHvn7+33/4a8//0Z+9TfebyWnQxZ7wxJhWcnoQRlPP9sQcaRzZvZj+iCOXM5PfUAfxJHIsPXiJOLI4kIZvWMiDljEkUK2BWVDHPFyliHiCJe2DBFHrJtl9P5TKXGEyXzN2BBHVQP+w0IcMZIvKBviCFCiDPF8jvHulDH4+RxcOYbKvwndI45xqqwmH4hjkHJliDhKCClDxDFGoU3oHnF0V7QMEUdvtY4nB8TRUcVN6B5x9FK9DBFHJxOUIeJIKEkZIo4e6h5PDoijsWnKEHG0Vfrg+hlxNDPHJnSPONqYrwwRRwY5yxBxNDHTJnSPOO6atQwRx00TlyHiuGOyg+tnxHHRlMeTA+K4YoUylOF1K7G32hyv0DcYeR/SDLfavGDuTehe2LKS5Fabr1qnDEXFkedWmy9J+JC6Cogj1a02z1tkE7qX/bSSpI8Fy9D4OBLebbP3AyhahvJfOTbhfVxWtwxViUNxfSx1PDkoE4ci+li5DNWKQ2P7qLuWtTI6jvu/T2NmtuwmdK/YlWPTuw/K2ATE0eRnl/aaP00ZirpyZO5j8U3oXtiykrMPytiL3HNk64MyDoI3pHn6SLuJCRR/WsnQB8eTL8XHoeg+KMNJEYei+7hs4jKUJw4F9cEm9IFEcWh4H5TxWK44NLAPjidPpYtDQ/pgE3pGxjjUuQ/KOClpHOrWB2WclzcO5TvfLlWGkseh1n1wPHlJ5Gtlzws/WSxYhvJfOTZrziZcjTgU2seyaZaJQ0FDWrYM1YpDw0e1chkqF4cGDmzxMlQxDg0ZG2WoaBzqPDzK2FSNQ4ywv8JxqE8fNPehdhxqPUvK2Csfh9pNlDIOZohDLeZKGZ9NEofuTZcyvjRPHGLGrU0Vhy71QVLObHGIYbczYRx6pQ9KemDOOHRu6pTx2LRx6NnsKeOpGs8hvWm19/tpZYk4cM3MywpuIg5YxAGLOGARByzigEUcsIgDFnHAIg5YxAGLOGARByzigEUcsIgDFnHAIg5YxAGLOGARByzigEUcsIgDFnHAIg5YxAGLOGARByzigEUcsIgDFnHAIg5YxAGLOGARByzigEUcsIgDFnHAIg5Y/wGE8Dd4W/1ZaQAAAABJRU5ErkJggg==">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14181c;
+    --surface: #1d2227;
+    --surface-2: #262c32;
+    --border: #333a41;
+    --text: #e8e3d8;
+    --text-muted: #8d9299;
+    --accent: #c08a34;
+    --accent-soft: rgba(192,138,52,0.14);
+    --good: #7a9c76;
+    --good-soft: rgba(122,156,118,0.15);
+    --miss: #a15a4c;
+    --miss-soft: rgba(161,90,76,0.12);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .wrap { max-width: 460px; margin: 0 auto; padding: 28px 18px 60px; }
+  h1, h2, .num { font-family: 'Fraunces', serif; }
+  header.top {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 1px solid var(--border); padding-bottom: 18px; margin-bottom: 16px;
+  }
+  h1 { font-size: 26px; font-weight: 500; margin: 0; letter-spacing: -0.01em; }
+  .date-line { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+  .streak-box { text-align: right; }
+  .streak-num { font-size: 34px; font-weight: 600; color: var(--accent); line-height: 1; }
+  .streak-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .tier-banner {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 10px 14px; margin-bottom: 20px; font-size: 12.5px; color: var(--text-muted);
+  }
+  .tier-banner strong { color: var(--accent); font-weight: 600; }
+
+  .tabs {
+    display: flex; gap: 6px; margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-btn {
+    flex: 1; background: none; border: none; color: var(--text-muted);
+    font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 500;
+    padding: 10px 4px; cursor: pointer; border-bottom: 2px solid transparent;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  section { margin-bottom: 22px; }
+  section h2 { font-size: 15px; font-weight: 500; margin: 0 0 10px; color: var(--text); }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
+  .row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; gap: 12px;
+  }
+  .row:last-child { border-bottom: none; }
+  .row label { flex: 1; cursor: pointer; }
+  .row input[type="checkbox"] { width: 19px; height: 19px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+  .row.locked { opacity: 0.35; }
+  .row.locked label { cursor: default; }
+  input[type="number"], input[type="time"], textarea {
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 4px; padding: 8px 10px; font-family: 'Inter', sans-serif; font-size: 14px; width: 100px;
+  }
+  textarea { width: 100%; resize: vertical; min-height: 50px; margin-top: 6px; }
+  .weight-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; }
+  .weight-row:last-child { padding-bottom: 0; }
+  .progress-track { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; margin: 10px 0 6px; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s ease; }
+  .progress-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
+  .save-btn {
+    width: 100%; background: var(--accent); color: #14181c; border: none; border-radius: 6px;
+    padding: 13px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; cursor: pointer; margin-top: 4px;
+  }
+  .save-btn:active { opacity: 0.85; }
+  .save-status { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 8px; min-height: 14px; }
+  .targets-panel input[type="number"], .targets-panel input[type="time"] { width: 90px; text-align: right; }
+  .targets-hint { font-size: 11px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 11.5px; min-width: 620px; }
+  th, td { padding: 7px 4px; text-align: center; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-muted); font-weight: 500; font-size: 11px; }
+  td:first-child, th:first-child { text-align: left; color: var(--text-muted); }
+  .mark-yes { color: var(--good); font-weight: 600; }
+  .mark-no { color: var(--miss); }
+  .mark-dash { color: var(--text-muted); }
+  .rest-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+  .rest-toggle input { accent-color: var(--accent); }
+  .footer-note { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 30px; line-height: 1.5; }
+  .tier-list { font-size: 12.5px; }
+  .tier-list .row { padding: 8px 0; }
+  .tier-list .tier-name { color: var(--text-muted); font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>The Ledger</h1>
+      <div class="date-line" id="dateLine">—</div>
+    </div>
+    <div class="streak-box">
+      <div class="streak-num" id="streakNum">0</div>
+      <div class="streak-label">days fully aligned</div>
+    </div>
+  </header>
+
+  <div class="tier-banner" id="tierBanner">Loading tier progress…</div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="morning">Morning</button>
+    <button class="tab-btn" data-tab="night">Night</button>
+    <button class="tab-btn" data-tab="weekly">Weekly</button>
+  </div>
+
+  <!-- MORNING TAB -->
+  <div class="tab-content active" id="tab-morning">
+    <section>
+      <h2>Foundations</h2>
+      <div class="panel">
+        <div class="row" id="row-bedMade">
+          <label for="bedMadeCheck">Bed made</label>
+          <input type="checkbox" id="bedMadeCheck" />
+        </div>
+        <div class="row" id="row-hydration">
+          <label for="hydrationCheck">Hydration ritual (water, salt, lemon)</label>
+          <input type="checkbox" id="hydrationCheck" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Faith</h2>
+      <div class="panel">
+        <div class="row" id="row-prayer">
+          <label for="prayerCheck">Morning prayer (outside, before workout)</label>
+          <input type="checkbox" id="prayerCheck" />
+        </div>
+        <div class="row" id="row-scripture">
+          <label for="scriptureCheck">Scripture study (after workout/shower)</label>
+          <input type="checkbox" id="scriptureCheck" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Body</h2>
+      <div class="panel">
+        <div class="weight-row">
+          <label for="weightInput">Weight today (lb)</label>
+          <input type="number" id="weightInput" step="0.1" placeholder="—" />
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-labels"><span>160</span><span id="currentWeightLabel">—</span><span>175</span></div>
+        <div class="row" id="row-trainOk" style="border-top:1px solid var(--border); margin-top:8px; padding-top:12px;">
+          <label for="trainedCheck">Trained today</label>
+          <input type="checkbox" id="trainedCheck" />
+        </div>
+        <div class="rest-toggle">
+          <input type="checkbox" id="restCheck" />
+          <label for="restCheck">Scheduled rest day (doesn't break streak)</label>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Focus</h2>
+      <div class="panel">
+        <div class="row" id="row-screenFree">
+          <label for="screenFreeCheck">30+ min no phone this morning</label>
+          <input type="checkbox" id="screenFreeCheck" />
+        </div>
+        <div class="row" id="row-topTask">
+          <label for="topTaskCheck">Top task written before phone touched</label>
+          <input type="checkbox" id="topTaskCheck" />
+        </div>
+      </div>
+    </section>
+
+    <button class="save-btn" id="saveMorningBtn">Save morning</button>
+    <div class="save-status" id="saveMorningStatus"></div>
+  </div>
+
+  <!-- NIGHT TAB -->
+  <div class="tab-content" id="tab-night">
+    <section>
+      <h2>Nutrition</h2>
+      <div class="panel">
+        <div class="weight-row" id="row-caloriesOk">
+          <label for="caloriesInput">Calories today</label>
+          <input type="number" id="caloriesInput" step="25" placeholder="—" />
+        </div>
+        <div class="weight-row" id="row-proteinOk">
+          <label for="proteinInput">Protein today (g)</label>
+          <input type="number" id="proteinInput" step="5" placeholder="—" />
+        </div>
+        <div class="weight-row">
+          <label for="carbsInput">Carbs today (g)</label>
+          <input type="number" id="carbsInput" step="5" placeholder="—" />
+        </div>
+        <div class="weight-row">
+          <label for="fatInput">Fat today (g)</label>
+          <input type="number" id="fatInput" step="5" placeholder="—" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Focus &amp; Career</h2>
+      <div class="panel">
+        <div class="weight-row" id="row-deepWorkOk">
+          <label for="deepWorkInput">Deep work today (hrs)</label>
+          <input type="number" id="deepWorkInput" step="0.25" placeholder="—" />
+        </div>
+        <div class="weight-row" id="row-phoneOk">
+          <label for="phoneMinutesInput">Scroll/passive phone use (min) — not calls or texts to friends</label>
+          <input type="number" id="phoneMinutesInput" step="5" placeholder="—" />
+        </div>
+        <div class="weight-row">
+          <label for="connectionCountInput">Meaningful outbound contacts today (calls/texts to a specific friend)</label>
+          <input type="number" id="connectionCountInput" step="1" placeholder="—" />
+        </div>
+        <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">These two don't compete — a call to a friend costs you nothing against the phone limit above.</div>
+        <div class="weight-row" id="row-careerOk" style="border-top:1px solid var(--border); margin-top:2px; padding-top:12px;">
+          <label for="careerMinutesInput">Skill-building/networking (min)</label>
+          <input type="number" id="careerMinutesInput" step="5" placeholder="—" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Night</h2>
+      <div class="panel">
+        <div class="weight-row" id="row-nightOk-time">
+          <label for="bedtimeInput">Bedtime tonight</label>
+          <input type="time" id="bedtimeInput" />
+        </div>
+        <div class="row" id="row-nightOk-phone" style="border-top:1px solid var(--border); margin-top:8px; padding-top:12px;">
+          <label for="phoneDownCheck">Phone down by curfew (60 min before bed)</label>
+          <input type="checkbox" id="phoneDownCheck" />
+        </div>
+        <div class="row" style="border-top:1px solid var(--border); margin-top:8px; padding-top:12px;">
+          <label for="nextDaySetupCheck">Tomorrow's clothes/bag set, calendar checked</label>
+          <input type="checkbox" id="nextDaySetupCheck" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Tomorrow's top task</h2>
+      <div class="panel">
+        <textarea id="tomorrowTaskInput" placeholder="Decide it now, not at 6am on no sleep. One task."></textarea>
+      </div>
+    </section>
+
+    <section>
+      <h2>Reading capture</h2>
+      <div class="panel">
+        <textarea id="readingCaptureInput" placeholder="Write this by hand in your notebook tonight. Transcribe it here tomorrow at your next T-60 session."></textarea>
+      </div>
+    </section>
+
+    <section>
+      <h2>Examen</h2>
+      <div class="panel">
+        <textarea id="examenInput" placeholder="Write this by hand in your notebook tonight, after the phone's away. Transcribe it here tomorrow, not tonight."></textarea>
+      </div>
+    </section>
+
+    <section>
+      <h2>One line</h2>
+      <div class="panel">
+        <textarea id="notesInput" placeholder="What actually happened today, not what should have."></textarea>
+      </div>
+    </section>
+
+    <button class="save-btn" id="saveNightBtn">Save night</button>
+    <div class="save-status" id="saveNightStatus"></div>
+  </div>
+
+  <!-- WEEKLY TAB -->
+  <div class="tab-content" id="tab-weekly">
+    <section>
+      <h2>Rate of gain</h2>
+      <div class="panel" id="gainRatePanel">Not enough data yet.</div>
+    </section>
+
+    <section>
+      <h2>Habit tiers</h2>
+      <div class="panel tier-list" id="tierListPanel"></div>
+      <button class="save-btn" id="unlockMorningBtn" style="margin-top:10px;">I already do the full morning routine — unlock it</button>
+      <div class="save-status" id="unlockMorningStatus"></div>
+      <div class="panel" style="margin-top:14px; font-size:12.5px;">
+        <div class="row">
+          <label for="manualTierInput">Manual tier override (1-6)</label>
+          <input type="number" id="manualTierInput" min="1" max="6" step="1" style="width:60px;" />
+        </div>
+        <div class="targets-hint">Skips the evidence requirement entirely. Use only if a tier's habits are genuinely already automatic for you.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>This week</h2>
+      <div class="panel" id="templeStreakPanel" style="margin-bottom:10px; font-size:13px; color:var(--text-muted);">Loading…</div>
+      <div class="panel">
+        <div class="row">
+          <label for="templeScheduledCheck">Temple appointment scheduled</label>
+          <input type="checkbox" id="templeScheduledCheck" />
+        </div>
+        <div class="row">
+          <label for="templeAttendedCheck">Temple attended this week</label>
+          <input type="checkbox" id="templeAttendedCheck" />
+        </div>
+      </div>
+      <button class="save-btn" id="saveWeekBtn" style="margin-top:10px;">Save this week</button>
+      <div class="save-status" id="saveWeekStatus"></div>
+    </section>
+
+    <section>
+      <h2>Last 7 days</h2>
+      <div class="panel">
+        <div class="table-scroll">
+        <table id="weekTable">
+          <thead>
+            <tr>
+              <th>Day</th><th>Bed</th><th>Hyd</th><th>Pray</th><th>Train</th><th>AM</th><th>Task</th>
+              <th>Scrip</th><th>Deep</th><th>Cal</th><th>Prot</th><th>Phn</th><th>Car</th><th>Night</th>
+            </tr>
+          </thead>
+          <tbody id="weekBody"></tbody>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Targets</h2>
+      <div class="panel targets-panel">
+        <div class="row"><label for="targetCalories">Calories (kcal/day)</label><input type="number" id="targetCalories" step="25" /></div>
+        <div class="row"><label for="targetProtein">Protein (g/day)</label><input type="number" id="targetProtein" step="5" /></div>
+        <div class="row"><label for="targetCarbs">Carbs (g/day)</label><input type="number" id="targetCarbs" step="5" /></div>
+        <div class="row"><label for="targetFat">Fat (g/day)</label><input type="number" id="targetFat" step="5" /></div>
+        <div class="row"><label for="targetDeepWork">Deep work (hrs/day)</label><input type="number" id="targetDeepWork" step="0.5" /></div>
+        <div class="row"><label for="targetPhone">Daytime phone limit (min)</label><input type="number" id="targetPhone" step="10" /></div>
+        <div class="row"><label for="targetBedtime">Bedtime target</label><input type="time" id="targetBedtime" /></div>
+        <div class="row"><label for="targetCareerMinutes">Skill-building (min/day)</label><input type="number" id="targetCareerMinutes" step="5" /></div>
+        <div class="targets-hint">Edit anytime — changes apply going forward, not retroactively.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer-note">No partial credit within a tier. Tiers unlock, never revoke.</div>
+</div>
+
+<script>
+// Storage backend: uses Claude's artifact bridge if present (viewing inside Claude),
+// otherwise falls back to real localStorage so this works as a standalone app on your phone.
+const storageBackend = (typeof window.storage !== 'undefined') ? window.storage : {
+  async get(key) {
+    const v = localStorage.getItem(key);
+    return v === null ? null : { key, value: v };
+  },
+  async set(key, value) {
+    localStorage.setItem(key, value);
+    return { key, value };
+  },
+  async delete(key) {
+    localStorage.removeItem(key);
+    return { key, deleted: true };
+  }
+};
+
+const START_WEIGHT = 160;
+const GOAL_WEIGHT = 175;
+const TIER_WINDOW = 14; // trailing days considered
+const TIER_NEED = 10;   // days aligned within that window needed to unlock next tier
+const DEFAULT_TARGETS = { calories: 2850, protein: 170, carbs: 365, fat: 80, deepWork: 3, phoneLimit: 120, bedtime: '22:45', careerMinutes: 30 };
+let TARGETS = { ...DEFAULT_TARGETS };
+let CURRENT_TIER = 1;
+
+const TIER_DEFS = [
+  { name: 'Foundations', habits: ['bedMade', 'hydration'] },
+  { name: 'Discipline', habits: ['prayer', 'trainOk'] },
+  { name: 'Focus', habits: ['screenFree', 'topTask', 'scripture'] },
+  { name: 'Growth', habits: ['deepWorkOk'] },
+  { name: 'Fuel', habits: ['caloriesOk', 'proteinOk', 'phoneOk'] },
+  { name: 'Closing', habits: ['careerOk', 'nightOk'] }
+];
+
+const HABIT_LABELS = {
+  bedMade: 'Bed made', hydration: 'Hydration ritual', prayer: 'Morning prayer', trainOk: 'Training/rest day',
+  screenFree: 'Screen-free morning', topTask: 'Top task set', scripture: 'Scripture study', deepWorkOk: 'Deep work',
+  caloriesOk: 'Calories in range', proteinOk: 'Protein target', phoneOk: 'Daytime phone limit',
+  careerOk: 'Career/skill time', nightOk: 'Bedtime & phone curfew'
+};
+
+const CHECKS = {
+  bedMade: e => !!e.bedMade,
+  hydration: e => !!e.hydration,
+  prayer: e => !!e.prayer,
+  trainOk: e => !!(e.trained || e.rest),
+  screenFree: e => !!e.screenFree,
+  topTask: e => !!e.topTask,
+  scripture: e => !!e.scripture,
+  deepWorkOk: (e, t) => e.deepWorkHours != null && e.deepWorkHours >= t.deepWork,
+  caloriesOk: (e, t) => e.calories != null && Math.abs(e.calories - t.calories) <= t.calories * 0.1,
+  proteinOk: (e, t) => e.protein != null && e.protein >= t.protein,
+  phoneOk: (e, t) => e.phoneMinutes != null && e.phoneMinutes <= t.phoneLimit,
+  careerOk: (e, t) => e.careerMinutes != null && e.careerMinutes >= t.careerMinutes,
+  nightOk: (e, t) => !!e.bedtime && e.bedtime <= t.bedtime && !!e.phoneDown
+};
+
+function habitsForTier(tier) {
+  return TIER_DEFS.slice(0, tier).flatMap(td => td.habits);
+}
+
+// Legacy full check for entries logged before the tier system existed (no .tier field)
+function legacyFullCheck(entry, t) {
+  const allHabits = TIER_DEFS.flatMap(td => td.habits);
+  // old entries won't have bedMade/hydration - if those are missing entirely, skip legacy day (treat as not aligned)
+  return allHabits.every(h => (CHECKS[h] ? CHECKS[h](entry, t) : false));
+}
+
+function isFullyAligned(entry, targets) {
+  if (!entry) return false;
+  const t = targets || DEFAULT_TARGETS;
+  if (entry.tier) {
+    return habitsForTier(entry.tier).every(h => CHECKS[h](entry, t));
+  }
+  return legacyFullCheck(entry, t);
+}
+
+async function loadTargets() {
+  try {
+    const res = await storageBackend.get('targets');
+    if (res) return { ...DEFAULT_TARGETS, ...JSON.parse(res.value) };
+  } catch (e) {}
+  return { ...DEFAULT_TARGETS };
+}
+async function saveTargets(t) {
+  try { await storageBackend.set('targets', JSON.stringify(t)); } catch (e) { console.error('Target save failed', e); }
+}
+async function loadProgress() {
+  try {
+    const res = await storageBackend.get('progress');
+    if (res) return JSON.parse(res.value).tier || 1;
+  } catch (e) {}
+  return 1;
+}
+async function saveProgress(tier) {
+  try { await storageBackend.set('progress', JSON.stringify({ tier })); } catch (e) { console.error('Progress save failed', e); }
+}
+
+function todayKey(offsetDays = 0) {
+  const d = new Date(); d.setDate(d.getDate() + offsetDays); return d.toISOString().slice(0, 10);
+}
+function dayLabel(offsetDays) {
+  const d = new Date(); d.setDate(d.getDate() + offsetDays);
+  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+function currentWeekKey() {
+  const d = new Date(); const day = d.getDay();
+  const diffToMonday = (day === 0 ? -6 : 1) - day;
+  d.setDate(d.getDate() + diffToMonday);
+  return d.toISOString().slice(0, 10);
+}
+function weekKeyOffset(weeksAgo) {
+  const d = new Date(); const day = d.getDay();
+  const diffToMonday = (day === 0 ? -6 : 1) - day;
+  d.setDate(d.getDate() + diffToMonday - weeksAgo * 7);
+  return d.toISOString().slice(0, 10);
+}
+async function loadWeekData(weeksAgo) {
+  try {
+    const res = await storageBackend.get('week:' + weekKeyOffset(weeksAgo));
+    return res ? JSON.parse(res.value) : null;
+  } catch (e) { return null; }
+}
+async function computeTempleStreak() {
+  let streak = 0; let offset = 0;
+  const thisWeek = await loadWeekData(0);
+  if (!thisWeek?.templeAttended) offset = 1; // this week not yet marked - start from last week
+  while (true) {
+    const data = await loadWeekData(offset);
+    if (data && data.templeAttended) { streak++; offset++; } else { break; }
+    if (streak > 104) break;
+  }
+  return streak;
+}
+async function renderTempleStreak() {
+  const panel = document.getElementById('templeStreakPanel');
+  const streak = await computeTempleStreak();
+  panel.innerHTML = `<strong style="color:var(--accent); font-size:18px;">${streak}</strong> consecutive week${streak === 1 ? '' : 's'} attended`;
+}
+
+async function loadEntry(key) {
+  try { const res = await storageBackend.get('log:' + key); return res ? JSON.parse(res.value) : null; }
+  catch (e) { return null; }
+}
+async function saveEntry(key, patch) {
+  try {
+    const existing = await loadEntry(key);
+    const merged = { ...(existing || {}), ...patch, tier: CURRENT_TIER };
+    const res = await storageBackend.set('log:' + key, JSON.stringify(merged));
+    return !!res;
+  } catch (e) { console.error('Save failed', e); return false; }
+}
+
+function collectMorning() {
+  return {
+    bedMade: document.getElementById('bedMadeCheck').checked,
+    hydration: document.getElementById('hydrationCheck').checked,
+    prayer: document.getElementById('prayerCheck').checked,
+    scripture: document.getElementById('scriptureCheck').checked,
+    weight: document.getElementById('weightInput').value ? parseFloat(document.getElementById('weightInput').value) : null,
+    trained: document.getElementById('trainedCheck').checked,
+    rest: document.getElementById('restCheck').checked,
+    screenFree: document.getElementById('screenFreeCheck').checked,
+    topTask: document.getElementById('topTaskCheck').checked
+  };
+}
+function collectNight() {
+  return {
+    calories: document.getElementById('caloriesInput').value ? parseFloat(document.getElementById('caloriesInput').value) : null,
+    protein: document.getElementById('proteinInput').value ? parseFloat(document.getElementById('proteinInput').value) : null,
+    carbs: document.getElementById('carbsInput').value ? parseFloat(document.getElementById('carbsInput').value) : null,
+    fat: document.getElementById('fatInput').value ? parseFloat(document.getElementById('fatInput').value) : null,
+    deepWorkHours: document.getElementById('deepWorkInput').value ? parseFloat(document.getElementById('deepWorkInput').value) : null,
+    phoneMinutes: document.getElementById('phoneMinutesInput').value ? parseFloat(document.getElementById('phoneMinutesInput').value) : null,
+    connection: document.getElementById('connectionCountInput').value ? parseInt(document.getElementById('connectionCountInput').value) : null,
+    careerMinutes: document.getElementById('careerMinutesInput').value ? parseFloat(document.getElementById('careerMinutesInput').value) : null,
+    bedtime: document.getElementById('bedtimeInput').value || null,
+    phoneDown: document.getElementById('phoneDownCheck').checked,
+    nextDaySetup: document.getElementById('nextDaySetupCheck').checked,
+    tomorrowTask: document.getElementById('tomorrowTaskInput').value,
+    readingCapture: document.getElementById('readingCaptureInput').value,
+    examen: document.getElementById('examenInput').value,
+    notes: document.getElementById('notesInput').value
+  };
+}
+function fillForm(entry) {
+  document.getElementById('bedMadeCheck').checked = !!entry?.bedMade;
+  document.getElementById('hydrationCheck').checked = !!entry?.hydration;
+  document.getElementById('prayerCheck').checked = !!entry?.prayer;
+  document.getElementById('scriptureCheck').checked = !!entry?.scripture;
+  document.getElementById('weightInput').value = entry?.weight ?? '';
+  document.getElementById('trainedCheck').checked = !!entry?.trained;
+  document.getElementById('restCheck').checked = !!entry?.rest;
+  document.getElementById('screenFreeCheck').checked = !!entry?.screenFree;
+  document.getElementById('topTaskCheck').checked = !!entry?.topTask;
+  document.getElementById('caloriesInput').value = entry?.calories ?? '';
+  document.getElementById('proteinInput').value = entry?.protein ?? '';
+  document.getElementById('carbsInput').value = entry?.carbs ?? '';
+  document.getElementById('fatInput').value = entry?.fat ?? '';
+  document.getElementById('deepWorkInput').value = entry?.deepWorkHours ?? '';
+  document.getElementById('phoneMinutesInput').value = entry?.phoneMinutes ?? '';
+  document.getElementById('connectionCountInput').value = entry?.connection ?? '';
+  document.getElementById('careerMinutesInput').value = entry?.careerMinutes ?? '';
+  document.getElementById('bedtimeInput').value = entry?.bedtime ?? '';
+  document.getElementById('phoneDownCheck').checked = !!entry?.phoneDown;
+  document.getElementById('nextDaySetupCheck').checked = !!entry?.nextDaySetup;
+  document.getElementById('tomorrowTaskInput').value = entry?.tomorrowTask ?? '';
+  document.getElementById('readingCaptureInput').value = entry?.readingCapture ?? '';
+  document.getElementById('examenInput').value = entry?.examen ?? '';
+  document.getElementById('notesInput').value = entry?.notes ?? '';
+}
+
+async function computeStreak() {
+  let streak = 0; let offset = 0;
+  const todayEntry = await loadEntry(todayKey(0));
+  if (!isFullyAligned(todayEntry, TARGETS)) offset = -1;
+  while (true) {
+    const entry = await loadEntry(todayKey(offset));
+    if (isFullyAligned(entry, TARGETS)) { streak++; offset--; } else { break; }
+    if (streak > 365) break;
+  }
+  return streak;
+}
+
+// Rolling consistency at the current tier over a trailing window - not a pure consecutive streak.
+// A single bad day doesn't erase progress toward the next unlock; it just costs one day's credit.
+async function computeTierWindowConsistency() {
+  let count = 0;
+  for (let i = 0; i > -TIER_WINDOW; i--) {
+    const entry = await loadEntry(todayKey(i));
+    if (entry && entry.tier === CURRENT_TIER && habitsForTier(CURRENT_TIER).every(h => CHECKS[h](entry, TARGETS))) {
+      count++;
+    }
+  }
+  return count;
+}
+
+async function checkAndAdvanceTier() {
+  if (CURRENT_TIER >= TIER_DEFS.length) return false;
+  const consistency = await computeTierWindowConsistency();
+  if (consistency >= TIER_NEED) {
+    CURRENT_TIER++;
+    await saveProgress(CURRENT_TIER);
+    return true;
+  }
+  return false;
+}
+
+async function findMostRecentWeight() {
+  for (let i = 0; i > -60; i--) {
+    const entry = await loadEntry(todayKey(i));
+    if (entry && entry.weight) return entry.weight;
+  }
+  return START_WEIGHT;
+}
+function renderMark(val, applicable = true) {
+  if (!applicable) return '<span class="mark-dash">–</span>';
+  return val ? '<span class="mark-yes">✓</span>' : '<span class="mark-no">×</span>';
+}
+
+async function renderWeek() {
+  const tbody = document.getElementById('weekBody');
+  tbody.innerHTML = '';
+  for (let i = -6; i <= 0; i++) {
+    const entry = await loadEntry(todayKey(i));
+    const tr = document.createElement('tr');
+    const tier = entry?.tier || 0;
+    const active = h => tier >= TIER_DEFS.findIndex(td => td.habits.includes(h)) + 1;
+    const cell = (habitKey) => {
+      if (!entry) return '<span class="mark-dash">–</span>';
+      if (!active(habitKey)) return '<span class="mark-dash">–</span>';
+      return renderMark(CHECKS[habitKey](entry, TARGETS));
+    };
+    const trainCell = entry ? renderMark(entry.trained, !entry.rest) : '<span class="mark-dash">–</span>';
+    tr.innerHTML = `
+      <td>${dayLabel(i)}</td>
+      <td>${cell('bedMade')}</td>
+      <td>${cell('hydration')}</td>
+      <td>${cell('prayer')}</td>
+      <td>${active('trainOk') ? trainCell : '<span class="mark-dash">–</span>'}</td>
+      <td>${cell('screenFree')}</td>
+      <td>${cell('topTask')}</td>
+      <td>${cell('scripture')}</td>
+      <td>${cell('deepWorkOk')}</td>
+      <td>${cell('caloriesOk')}</td>
+      <td>${cell('proteinOk')}</td>
+      <td>${cell('phoneOk')}</td>
+      <td>${cell('careerOk')}</td>
+      <td>${cell('nightOk')}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+async function refreshWeightProgress() {
+  const current = await findMostRecentWeight();
+  const pct = Math.max(0, Math.min(100, ((current - START_WEIGHT) / (GOAL_WEIGHT - START_WEIGHT)) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('currentWeightLabel').textContent = current + ' lb';
+}
+
+function applyLockedRows() {
+  const rowsByHabit = {
+    bedMade: 'row-bedMade', hydration: 'row-hydration', prayer: 'row-prayer', trainOk: 'row-trainOk',
+    screenFree: 'row-screenFree', topTask: 'row-topTask', scripture: 'row-scripture', deepWorkOk: 'row-deepWorkOk',
+    caloriesOk: 'row-caloriesOk', proteinOk: 'row-proteinOk', phoneOk: 'row-phoneOk',
+    careerOk: 'row-careerOk'
+  };
+  const unlocked = new Set(habitsForTier(CURRENT_TIER));
+  Object.entries(rowsByHabit).forEach(([habit, rowId]) => {
+    const el = document.getElementById(rowId);
+    if (!el) return;
+    el.classList.toggle('locked', !unlocked.has(habit));
+  });
+  const nightUnlocked = unlocked.has('nightOk');
+  ['row-nightOk-time', 'row-nightOk-phone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('locked', !nightUnlocked);
+  });
+}
+
+async function renderTierBanner() {
+  const banner = document.getElementById('tierBanner');
+  if (CURRENT_TIER >= TIER_DEFS.length) {
+    banner.innerHTML = `<strong>All tiers unlocked.</strong> Every habit in the system is now part of your streak.`;
+    return;
+  }
+  const consistency = await computeTierWindowConsistency();
+  const nextTier = TIER_DEFS[CURRENT_TIER];
+  const nextNames = nextTier.habits.map(h => HABIT_LABELS[h]).join(' & ');
+  const remaining = Math.max(0, TIER_NEED - consistency);
+  banner.innerHTML = `<strong>Tier ${CURRENT_TIER}: ${TIER_DEFS[CURRENT_TIER - 1].name}.</strong> ${consistency}/${TIER_NEED} aligned days in the last ${TIER_WINDOW}. ${remaining > 0 ? remaining + ' more to unlock ' + nextNames + '.' : 'Ready to unlock ' + nextNames + ' on your next save.'}`;
+}
+
+async function computeGainRate() {
+  // Window B = days -6..0 (recent week), Window A = days -13..-7 (prior week)
+  const gather = async (start, end) => {
+    const vals = [];
+    for (let i = start; i <= end; i++) {
+      const entry = await loadEntry(todayKey(i));
+      if (entry && entry.weight != null) vals.push(entry.weight);
+    }
+    return vals;
+  };
+  const weekB = await gather(-6, 0);
+  const weekA = await gather(-13, -7);
+  if (weekB.length < 3 || weekA.length < 3) return null;
+  const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+  return avg(weekB) - avg(weekA); // lb per week
+}
+
+function renderGainRateText(rate) {
+  const panel = document.getElementById('gainRatePanel');
+  if (rate === null) {
+    panel.textContent = 'Not enough logged weights yet — need at least 3 entries in each of the last two weeks.';
+    return;
+  }
+  const sign = rate >= 0 ? '+' : '';
+  let note;
+  if (rate < 0.25) note = 'Below target range (0.25–0.8 lb/wk). If this holds 2+ weeks, add 100–150 kcal/day.';
+  else if (rate > 0.8) note = 'Above target range (0.25–0.8 lb/wk). Consider cutting 100–150 kcal/day to limit fat gain.';
+  else note = 'Right in the target lean-bulk range.';
+  panel.innerHTML = `<strong style="color:var(--accent); font-size:16px;">${sign}${rate.toFixed(2)} lb/week</strong><div style="margin-top:6px; color:var(--text-muted); font-size:12.5px;">${note}</div>`;
+}
+
+function renderTierList() {
+  const panel = document.getElementById('tierListPanel');
+  panel.innerHTML = TIER_DEFS.map((td, idx) => {
+    const tierNum = idx + 1;
+    const status = tierNum < CURRENT_TIER ? '✓ unlocked' : tierNum === CURRENT_TIER ? 'active now' : 'locked';
+    const opacity = tierNum <= CURRENT_TIER ? '1' : '0.4';
+    return `<div class="row" style="opacity:${opacity}"><label>${td.name}: ${td.habits.map(h => HABIT_LABELS[h]).join(', ')}</label><span class="tier-name">${status}</span></div>`;
+  }).join('');
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === 'tab-' + tabName));
+}
+
+async function refreshAll() {
+  const streak = await computeStreak();
+  document.getElementById('streakNum').textContent = streak;
+  await renderTierBanner();
+  renderTierList();
+  applyLockedRows();
+  await renderWeek();
+  const rate = await computeGainRate();
+  renderGainRateText(rate);
+}
+
+async function init() {
+  document.getElementById('dateLine').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  TARGETS = await loadTargets();
+  CURRENT_TIER = await loadProgress();
+
+  document.getElementById('targetCalories').value = TARGETS.calories;
+  document.getElementById('targetProtein').value = TARGETS.protein;
+  document.getElementById('targetCarbs').value = TARGETS.carbs;
+  document.getElementById('targetFat').value = TARGETS.fat;
+  document.getElementById('targetDeepWork').value = TARGETS.deepWork;
+  document.getElementById('targetPhone').value = TARGETS.phoneLimit;
+  document.getElementById('targetBedtime').value = TARGETS.bedtime;
+  document.getElementById('targetCareerMinutes').value = TARGETS.careerMinutes;
+
+  const onTargetChange = async () => {
+    TARGETS = {
+      calories: parseFloat(document.getElementById('targetCalories').value) || DEFAULT_TARGETS.calories,
+      protein: parseFloat(document.getElementById('targetProtein').value) || DEFAULT_TARGETS.protein,
+      carbs: parseFloat(document.getElementById('targetCarbs').value) || DEFAULT_TARGETS.carbs,
+      fat: parseFloat(document.getElementById('targetFat').value) || DEFAULT_TARGETS.fat,
+      deepWork: parseFloat(document.getElementById('targetDeepWork').value) || DEFAULT_TARGETS.deepWork,
+      phoneLimit: parseFloat(document.getElementById('targetPhone').value) || DEFAULT_TARGETS.phoneLimit,
+      bedtime: document.getElementById('targetBedtime').value || DEFAULT_TARGETS.bedtime,
+      careerMinutes: parseFloat(document.getElementById('targetCareerMinutes').value) || DEFAULT_TARGETS.careerMinutes
+    };
+    await saveTargets(TARGETS);
+    await refreshAll();
+  };
+  ['targetCalories','targetProtein','targetCarbs','targetFat','targetDeepWork','targetPhone','targetBedtime','targetCareerMinutes']
+    .forEach(id => document.getElementById(id).addEventListener('change', onTargetChange));
+
+  document.getElementById('manualTierInput').value = CURRENT_TIER;
+  document.getElementById('manualTierInput').addEventListener('change', async () => {
+    const val = parseInt(document.getElementById('manualTierInput').value);
+    if (val >= 1 && val <= TIER_DEFS.length) {
+      CURRENT_TIER = val;
+      await saveProgress(CURRENT_TIER);
+      await refreshAll();
+    }
+  });
+  document.getElementById('unlockMorningBtn').addEventListener('click', async () => {
+    const status = document.getElementById('unlockMorningStatus');
+    if (CURRENT_TIER < 3) {
+      CURRENT_TIER = 3;
+      await saveProgress(CURRENT_TIER);
+      document.getElementById('manualTierInput').value = CURRENT_TIER;
+      await refreshAll();
+      status.textContent = 'Unlocked — Tiers 1-3 now active.';
+    } else {
+      status.textContent = 'Already unlocked.';
+    }
+    setTimeout(() => { status.textContent = ''; }, 2500);
+  });
+
+  const today = await loadEntry(todayKey(0));
+  fillForm(today);
+
+  await refreshWeightProgress();
+  await refreshAll();
+
+  document.getElementById('saveMorningBtn').addEventListener('click', async () => {
+    const status = document.getElementById('saveMorningStatus');
+    status.textContent = 'Saving…';
+    const ok = await saveEntry(todayKey(0), collectMorning());
+    if (ok) {
+      const advanced = await checkAndAdvanceTier();
+      status.textContent = advanced ? '🔓 New tier unlocked! Check the Weekly tab.' : 'Morning logged.';
+      await refreshWeightProgress();
+      await refreshAll();
+    } else {
+      status.textContent = 'Save failed — try again.';
+    }
+    setTimeout(() => { status.textContent = ''; }, 3000);
+  });
+
+  document.getElementById('saveNightBtn').addEventListener('click', async () => {
+    const status = document.getElementById('saveNightStatus');
+    status.textContent = 'Saving…';
+    const ok = await saveEntry(todayKey(0), collectNight());
+    if (ok) {
+      const advanced = await checkAndAdvanceTier();
+      status.textContent = advanced ? '🔓 New tier unlocked! Check the Weekly tab.' : 'Night logged.';
+      await refreshAll();
+    } else {
+      status.textContent = 'Save failed — try again.';
+    }
+    setTimeout(() => { status.textContent = ''; }, 3000);
+  });
+
+  try {
+    const weekRes = await storageBackend.get('week:' + currentWeekKey());
+    const weekData = weekRes ? JSON.parse(weekRes.value) : null;
+    document.getElementById('templeScheduledCheck').checked = !!weekData?.templeScheduled;
+    document.getElementById('templeAttendedCheck').checked = !!weekData?.templeAttended;
+  } catch (e) {}
+  await renderTempleStreak();
+
+  document.getElementById('saveWeekBtn').addEventListener('click', async () => {
+    const wStatus = document.getElementById('saveWeekStatus');
+    wStatus.textContent = 'Saving…';
+    const data = {
+      templeScheduled: document.getElementById('templeScheduledCheck').checked,
+      templeAttended: document.getElementById('templeAttendedCheck').checked
+    };
+    try {
+      await storageBackend.set('week:' + currentWeekKey(), JSON.stringify(data));
+      wStatus.textContent = 'Saved for this week.';
+      await renderTempleStreak();
+    } catch (e) {
+      wStatus.textContent = 'Save failed — try again.';
+    }
+    setTimeout(() => { wStatus.textContent = ''; }, 2500);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
